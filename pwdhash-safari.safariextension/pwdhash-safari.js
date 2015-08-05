@@ -1,7 +1,7 @@
 /*
 
 Pwdhash-Safari v0.1 (2015-08-04)
-Copyright 2015 Todd Iceton (pwdhashsafari@emailbad.com)
+Copyright 2015 J Iceton (pwdhashsafari@emailbad.com)
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
