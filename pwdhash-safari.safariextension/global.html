@@ -1,0 +1,25 @@
+<html>
+<head>
+</head>
+<body>
+
+<script class="script" src="domain-extractor.js"></script>
+<script class="script" src="md5.js"></script>
+<script class="script" src="hashed-password.js"></script>
+<script>
+function hashPassword(msgEvent) {
+    var domain = (new SPH_DomainExtractor()).extractDomain(msgEvent.name),
+        SPH_kPasswordPrefix = "@@",
+        size = SPH_kPasswordPrefix.length,
+        val = msgEvent.message;
+    if (val.substring(0, size) == SPH_kPasswordPrefix) {
+        val = val.substring(size);
+    }
+    var result = (new SPH_HashedPassword(val, domain)).toString();
+    safari.application.activeBrowserWindow.activeTab.page.dispatchMessage(msgEvent.message, result);
+}
+safari.application.activeBrowserWindow.activeTab.addEventListener("message", hashPassword, false);
+</script>
+
+</body>
+</html>
