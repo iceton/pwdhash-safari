@@ -8,6 +8,7 @@
 <script class="script" src="hashed-password.js"></script>
 <script>
 function hashPassword(msgEvent) {
+    // original PwdHash code, not touching this
     var domain = (new SPH_DomainExtractor()).extractDomain(msgEvent.name),
         SPH_kPasswordPrefix = "@@",
         size = SPH_kPasswordPrefix.length,
@@ -16,6 +17,7 @@ function hashPassword(msgEvent) {
         val = val.substring(size);
     }
     var result = (new SPH_HashedPassword(val, domain)).toString();
+    // send back to injected extension
     safari.application.activeBrowserWindow.activeTab.page.dispatchMessage(msgEvent.message, result);
 }
 safari.application.activeBrowserWindow.activeTab.addEventListener("message", hashPassword, false);

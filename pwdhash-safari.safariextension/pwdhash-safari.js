@@ -67,10 +67,6 @@ function PwdhashSafariPasswordElement(el) {
         // mark current el and send to hash
         currentEl = el;
         safari.self.tab.dispatchMessage(document.location.href, el.value);
-        /*
-        el.value = result;
-        // store hashed value for comparison when modifying, using this.value because result is saving with zero-width characters after it for some reason
-        data.hash = el.value;*/
     }
     function keydownListener(e) {
         // check whether hash is needed, don't clear
@@ -101,7 +97,7 @@ function PwdhashSafariPasswordElement(el) {
         el.value = "";
     }
     function pwdhashListener(e) {
-        console.log(e);
+        // store hashed value for comparison when modifying, using this.value because result is saving with zero-width characters after it for some reason
         if (el.value === e.detail.value) {
             el.value = e.detail.hashed;
             data.hash = el.value;
@@ -134,7 +130,6 @@ observer.observe(document, {
 });
 
 safari.self.addEventListener("message", function(msgEvent) {
-    console.log(msgEvent);
     currentEl.dispatchEvent(new CustomEvent("pwdhash", {
         "detail": {
             "value": msgEvent.name,
