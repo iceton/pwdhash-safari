@@ -34,7 +34,7 @@ function PwdhashSafariPasswordElement(el) {
     };
     // defining functions in here so event handlers can access data & class functions
     function activatePwdhash() {
-        el.addEventListener("blur", hashPassword, true);
+        el.addEventListener("blur", blurListener, true);
         el.addEventListener("keydown", keydownListener, true);
         el.addEventListener("paste", pasteListener, true);
         el.addEventListener("pwdhash", pwdhashListener, true);
@@ -46,8 +46,11 @@ function PwdhashSafariPasswordElement(el) {
         }
         hashPassword();
     }
+    function blurListener(e) {
+        replaceValue();
+    }
     function deactivatePwdhash() {
-        el.removeEventListener("blur", hashPassword, true);
+        el.removeEventListener("blur", blurListener, true);
         el.removeEventListener("keydown", keydownListener, true);
         el.removeEventListener("paste", pasteListener, true);
         el.removeEventListener("pwdhash", pwdhashListener, true);
@@ -71,7 +74,7 @@ function PwdhashSafariPasswordElement(el) {
     function keydownListener(e) {
         // check whether hash is needed, don't clear
         if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || navKeyCodes.indexOf(e.keyCode) !== -1) {
-            hashPassword();
+            replaceValue();
             return;
         }
         // clear value if modifying a hashed password
@@ -80,28 +83,37 @@ function PwdhashSafariPasswordElement(el) {
         }
     }
     function keyupListener(e) {
-        // activate?
-        if (!data.active) {
-            if (e.keyCode === 113 || el.value === "@@") { // F2 or @@
-                activatePwdhash();
+        if (data.active) {
+            // deactivate only with F2
+            if (e.keyCode === 113) {
+                deactivatePwdhash();
+                return;
             }
-            return;
+            hashPassword();
         }
-        // deactivate only with F2
-        if (e.keyCode === 113) {
-            deactivatePwdhash();
-            return;
-        }
+        // activate?
+        if (e.keyCode === 113 || el.value === "@@") { // F2 or @@
+            activatePwdhash();
+        }        
     }
     function pasteListener() {
         el.value = "";
+        setTimeout(hashPassword, 10);
     }
     function pwdhashListener(e) {
         // store hashed value for comparison when modifying, using this.value because result is saving with zero-width characters after it for some reason
         if (el.value === e.detail.value) {
-            el.value = e.detail.hashed;
-            data.hash = el.value;
+            data.hash = e.detail.hashed;
         }
+    }
+    function replaceValue() {
+        if (el.value === data.hash) {
+            return;
+        }
+        el.value = data.hash;
+        // replace hash with value because value sanitizes zero-width spaces which were a problem
+        data.hash = el.value;
+
     }
     el.addEventListener("keyup", keyupListener, true);
     el.dataset.pwdhashSafari = "1";
