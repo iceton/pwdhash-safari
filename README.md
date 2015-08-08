@@ -8,7 +8,9 @@ Safari extension to generate PwdHash hashed passwords
 
 ## Generate a password
 
-Click the password input and press <kbd>F2</kbd> or <kbd>@</kbd> <kbd>@</kbd> before typing your password. When the input's background is green, your password will be hashed.
+Click a password input and press <kbd>F2</kbd> or <kbd>@</kbd> <kbd>@</kbd> before typing your password. When the input's background is green, your password will be hashed.
+
+(PwdHash hashes are often 2 characters longer than your original password. You can usually see the hash being substituted when the cursor leaves the password input.)
 
 ## What's PwdHash?
 
