@@ -74,7 +74,6 @@ function PwdhashSafariPasswordElement(el) {
     function keydownListener(e) {
         // check whether hash is needed, don't clear
         if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || navKeyCodes.indexOf(e.keyCode) !== -1) {
-            replaceValue();
             return;
         }
         // clear value if modifying a hashed password
